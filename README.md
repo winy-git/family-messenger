@@ -1,2 +1,2 @@
 # family-messenger
-let`s join a family-mesenger project.
+let`s join a family-messenger project.
