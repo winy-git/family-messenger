@@ -294,73 +294,73 @@
             });
         }
 
-    function join() {
-        if(conn) {
-            conn.close();
+        function join() {
+            if(conn) {
+                conn.close();
+            }
+            var receiverId = document.getElementById('receiver-id').value;
+            conn = peer.connect(receiverId);
+            conn.on('open', function() {
+                document.getElementById('status').innerHTML = 'connected to' + conn.peer;
+            });
+            conn.on('data', function(data) {
+                addMessage(data, "right");
+            });
         }
-        var receiverId = document.getElementById('receiver-id').value;
-        conn = peer.connect(receiverId);
-        conn.on('open', function() {
-            document.getElementById('status').innerHTML = 'connected to' + conn.peer;
-        });
-        conn.on('data', function(data) {
-            addMessage(data, "right");
-        });
-    }
 
-    function addMessage(msg, side) {
-        var msgHtml = [];
+        function addMessage(msg, side) {
+            var msgHtml = [];
 
-        var now = new Date();
-        var h = now.getHours();
-        var m = now.getMinutes();
-        var s = now.getSeconds();
+            var now = new Date();
+            var h = now.getHours();
+            var m = now.getMinutes();
+            var s = now.getSeconds();
 
-        if(h < 10) h = "0" + h;
-        if(m < 10) m = "0" + m;
-        if(s < 10) s = "0" + s;
+            if(h < 10) h = "0" + h;
+            if(m < 10) m = "0" + m;
+            if(s < 10) s = "0" + s;
 
-        if(side === 'left') {
-            msgHtml.push('<li class="chat-left">');
-                msgHtml.push('<div class="chat-avatar">');
-                    msgHtml.push('<img src="media/avatar1.png" alt="Retail Admin">');
-                    msgHtml.push('<div class="chat-name">Winy</div>');
-                msgHtml.push('</div>');
-                msgHtml.push('<div class="chat-text">' + msg + '</div>');
-                    msgHtml.push('<div class="chat-hour">' + h + ':' + m + ':' + s + '<span class="fa fa-check-circle">');
-                        msgHtml.push('</span>');
+            if(side === 'left') {
+                msgHtml.push('<li class="chat-left">');
+                    msgHtml.push('<div class="chat-avatar">');
+                        msgHtml.push('<img src="media/avatar1.png" alt="Retail Admin">');
+                        msgHtml.push('<div class="chat-name">Winy</div>');
                     msgHtml.push('</div>');
-            msgHtml.push('</li>');
-        } else {
-            msgHtml.push('<li class="chat-right">');
-                msgHtml.push('<div class="chat-hour">' + h + ':' + m + ':' + s + '<span class="fa fa-check-circle"></span></div>');
-                msgHtml.push('<div class="chat-text">' + msg + '</div>');
-                msgHtml.push('<div class="chat-avatar">');
-                    msgHtml.push('<img src="media/avatar2.png" alt="Retail Admin">');
-                    msgHtml.push('<div class="chat-name"> Young </div>');
-                msgHtml.push('</div>');
-            msgHtml.push('</li>');
+                    msgHtml.push('<div class="chat-text">' + msg + '</div>');
+                        msgHtml.push('<div class="chat-hour">' + h + ':' + m + ':' + s + '<span class="fa fa-check-circle">');
+                            msgHtml.push('</span>');
+                        msgHtml.push('</div>');
+                msgHtml.push('</li>');
+            } else {
+                msgHtml.push('<li class="chat-right">');
+                    msgHtml.push('<div class="chat-hour">' + h + ':' + m + ':' + s + '<span class="fa fa-check-circle"></span></div>');
+                    msgHtml.push('<div class="chat-text">' + msg + '</div>');
+                    msgHtml.push('<div class="chat-avatar">');
+                        msgHtml.push('<img src="media/avatar2.png" alt="Retail Admin">');
+                        msgHtml.push('<div class="chat-name"> Young </div>');
+                    msgHtml.push('</div>');
+                msgHtml.push('</li>');
+            }
+            document.getElementById('chat_box').innerHTML += msgHtml.join('');
         }
-        document.getElementById('chat_box').innerHTML += msgHtml.join('');
-    }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        init();
-        document.getElementById('connect-button').addEventListener('click', function() {
-            join()
-        });    
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+            document.getElementById('connect-button').addEventListener('click', function() {
+                join()
+            });    
 
-        document.getElementById('sendMessageBox').addEventListener('keydown', function(event) {
-    if (event.key === "Enter" && conn && conn.open) {
-        var msg = document.getElementById('sendMessageBox').value;
-        document.getElementById('sendMessageBox').value = '';
-        conn.send(msg);
-        addMessage(msg, "left");
-    } else if (event.key === "Enter") {
-        document.getElementById('status').innerHTML = 'Connection is closed';
-    }
-});
-    });
+            document.getElementById('sendMessageBox').addEventListener('keydown', function(event) {
+                if (event.key === "Enter" && conn && conn.open) {
+                    var msg = document.getElementById('sendMessageBox').value;
+                document.getElementById('sendMessageBox').value = '';
+                conn.send(msg);
+                addMessage(msg, "left");
+                } else if (event.key === "Enter") {
+                    document.getElementById('status').innerHTML = 'Connection is closed';
+                    }
+            });
+        });
     </script>
   </body>
 </html>

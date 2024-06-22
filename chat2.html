@@ -9,8 +9,6 @@
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-
-      <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
       
       <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
@@ -235,9 +233,8 @@
             if(peer.id == null) {
                 peer.id = lastPeerId;
             } else {lastPeerId = peer.id;}
-
-            $('#receiver-id').html("ID: " + peer.id);
-            $('#status').html('Awaiting connection...');
+            document.getElementById('receiver-id').innerHTML = 'ID: ' + peer.id;
+            document.getElementById('status').innerHTML = 'Awaiting connection...';
             });
             
             peer.on('connection', function(con2) {
@@ -250,13 +247,13 @@
                     });
                 } else {
                     conn = con2;
-                    $('#status').html("connected to: " + conn.peer);
+                    document.getElementById('status').innerHTML = 'connected to: ' + conn.peer;
                     ready();
                 }
             });
 
             peer.on('disconnected', function() {
-                $('#status').html("connection lost. Please reconnect.");
+                document.getElementById('status').innerHTML = 'connection is lost. Please reconnect...';
                 peer.id = lastPeerId;
                 peer._lastServerId = lastPeerId;
                 peer.reconnect();
@@ -264,7 +261,7 @@
 
             peer.on('close', function() {
                 conn = null;
-                $('#status').html('Connection is closed.');
+                document.getElementById('status').innerHTML = 'Connection is closed.';
             });
 
             peer.on('error', function(err) {
@@ -278,61 +275,58 @@
             });
 
             conn.on('close', function() {
-                $('#status').html('connection reset. Awaiting connection...');
+                document.getElementById('status').innerHTML = 'connection is reset. Awaiting connection...';
                 conn = null;
             });
         }
 
-            function addMessage(msg, side) {
+        function addMessage(msg, side) {
 
-                var msgHtml = [];
+            var msgHtml = [];
 
-                var now = new Date();
-                var h = now.getHours();
-                var m = now.getMinutes();
-                var s = now.getSeconds();
+            var now = new Date();
+            var h = now.getHours();
+            var m = now.getMinutes();
+            var s = now.getSeconds();
 
-                if(h < 10) h = "0" + h;
-                if(m < 10) m = "0" + m;
-                if(s < 10) s = "0" + s;
+            if(h < 10) h = "0" + h;
+            if(m < 10) m = "0" + m;
+            if(s < 10) s = "0" + s;
 
-                if(side === 'left') {
-                    msgHtml.push('<li class="chat-left">');
-                        msgHtml.push('<div class="chat-avatar">');
-                            msgHtml.push('<img src="media/avatar2.png" alt="Retail Admin">');
-                            msgHtml.push('<div class="chat-name"> Young </div>');
+            if(side === 'left') {
+                msgHtml.push('<li class="chat-left">');
+                    msgHtml.push('<div class="chat-avatar">');
+                        msgHtml.push('<img src="media/avatar2.png" alt="Retail Admin">');
+                        msgHtml.push('<div class="chat-name"> Young </div>');
+                    msgHtml.push('</div>');
+                    msgHtml.push('<div class="chat-text">' + msg + '</div>');
+                        msgHtml.push('<div class="chat-hour">' + h + ':' + m + ':' + s + '<span class="fa fa-check-circle">');
+                            msgHtml.push('</span>');
                         msgHtml.push('</div>');
-                        msgHtml.push('<div class="chat-text">' + msg + '</div>');
-                            msgHtml.push('<div class="chat-hour">' + h + ':' + m + ':' + s + '<span class="fa fa-check-circle">');
-                                msgHtml.push('</span>');
-                            msgHtml.push('</div>');
-                    msgHtml.push('</li>');
-                } else {
-                    msgHtml.push('<li class="chat-right">');
-                        msgHtml.push('<div class="chat-hour">' + h + ':' + m + ':' + s + '<span class="fa fa-check-circle"></span></div>');
-                        msgHtml.push('<div class="chat-text">' + msg + '</div>');
-                        msgHtml.push('<div class="chat-avatar">');
-                            msgHtml.push('<img src="media/avatar1.png" alt="Retail Admin">');
-                            msgHtml.push('<div class="chat-name"> Winy </div>');
-                        msgHtml.push('</div>');
-                    msgHtml.push('</li>');
-                }
-
-                $('#chat_box').append(msgHtml.join(''));
+                msgHtml.push('</li>');
+            } else {
+                msgHtml.push('<li class="chat-right">');
+                    msgHtml.push('<div class="chat-hour">' + h + ':' + m + ':' + s + '<span class="fa fa-check-circle"></span></div>');
+                    msgHtml.push('<div class="chat-text">' + msg + '</div>');
+                    msgHtml.push('<div class="chat-avatar">');
+                        msgHtml.push('<img src="media/avatar1.png" alt="Retail Admin">');
+                        msgHtml.push('<div class="chat-name"> Winy </div>');
+                    msgHtml.push('</div>');
+                msgHtml.push('</li>');
+            }
+            document.getElementById('chat_box').innerHTML += msgHtml.join('');
         }
-      
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
             init();
-        
-            $('#sendMessageBox').keydown(function(event) {
+            document.getElementById('sendMessageBox').addEventListener('keydown', function(event) {
                 if (event.key === "Enter" && conn && conn.open) {
-                    var msg = $('#sendMessageBox').val();
-                    $('#sendMessageBox').val('');
+                    var msg = document.getElementById('sendMessageBox').value;
+                    document.getElementById('sendMessageBox').value = '';
                     conn.send(msg);
                     addMessage(msg, "left");
-                } else if (event.key === "Enter") {
-                    $('#status').html('Connection is closed');
-                }
+                } else if(event.key === "Enter") {
+                    document.getElementById('status').innerHTML = 'Connection is closed';
+                    }
             });
         });
     </script>
